@@ -9,7 +9,7 @@ If you are interested in becoming a maintainer of this project, please contact u
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/bitpay/opencart-plugin/master.svg?style=flat-square)](https://travis-ci.org/bitpay/opencart-plugin)
 
-## Last Cart Version Tested: 3.0.2.0
+## Last OpenCart Version Tested: 3.2.0.2 (not compatible with v2 branch)
 
 ## Installation
 
@@ -19,8 +19,8 @@ Follow the instructions found in the [BitPay for OpenCart Guide](GUIDE.md)
 
 ``` bash
 # Clone the repo
-$ git clone https://github.com/bitpay/opencart-plugin.git
-$ cd ./opencart-plugin
+$ git clone https://github.com/bitpay/opencart3-plugin.git
+$ cd ./opencart3-plugin
 
 # Install dependencies via Composer
 $ composer install
@@ -66,17 +66,13 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 **BitPay Support:**
 
-* Last OpenCart Version Tested: 3.0.2.0 (not compatible with v2 branch)
-* [GitHub Issues](https://github.com/bitpay/magento-plugin/issues)
-  * Open an issue if you are having issues with this plugin.
-* [Support](https://help.bitpay.com)
+* Last OpenCart Version Tested: 3.2.0.2 (not compatible with v2 branch)
+* [Support](https://support.bitpay.com/hc/en-us/articles/115003000543-How-do-I-accept-bitcoin-with-Opencart-)
   * BitPay merchant support documentation
 
 **OpenCart Support:**
 
 * [Homepage](http://www.opencart.com)
-* [GitHub Issues](https://github.com/opencart/opencart/issues)
-* [Support](http://www.opencart.com/index.php?route=support/support)
 * [Forums](http://forum.opencart.com)
 
 ## License
