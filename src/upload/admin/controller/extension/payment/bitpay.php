@@ -545,6 +545,6 @@ class ControllerExtensionPaymentBitpay extends Controller {
 	 */
 	public function uninstall() {
 		$this->load->model('setting/setting');
-		$this->model_setting_setting->deleteSetting('bitpay');
+		$this->model_setting_setting->deleteSetting('payment_bitpay');
 	}
 }
