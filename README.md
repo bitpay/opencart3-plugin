@@ -9,11 +9,19 @@ If you are interested in becoming a maintainer of this project, please contact u
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/bitpay/opencart-plugin/master.svg?style=flat-square)](https://travis-ci.org/bitpay/opencart-plugin)
 
-## Last OpenCart Version Tested: 3.2.0.2 (not compatible with v2 branch)
+## Last OpenCart Version Tested: 3.0.2.0 (not compatible with v2 branch)
 
 ## Installation
 
 Follow the instructions found in the [BitPay for OpenCart Guide](GUIDE.md)
+
+## Server requirements
+PHP > 5.5 or PHP > 7.0, with the following PHP plugins enabled:
+* GMP or BCMATH
+* OpenSSL
+* JSON
+* CURL
+
 
 ## Development Setup
 
