@@ -518,7 +518,8 @@ class ControllerExtensionPaymentBitpay extends Controller {
 				$default_complete = $order_status['order_status_id'];
 			}
 		}
-
+                //Delete old settings from previous bitpay installation
+                $this->db->query("delete from oc_setting where code='bitpay'");
 		$this->load->model('setting/setting');
 		$default_settings = array(
 			'payment_bitpay_private_key' => null,
