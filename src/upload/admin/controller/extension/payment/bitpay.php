@@ -19,7 +19,11 @@ class ControllerExtensionPaymentBitpay extends Controller {
 	 */
 	public function __construct($registry) {
 		parent::__construct($registry);
-
+                if(!extension_loaded('gmp') && !extension_loaded('bcmath'))
+		{
+			echo 'Cannot use BitPay extension. It needs GMP or BCMath Exctensions.';
+			exit;
+		}
 		// Make langauge strings and BitPay Library available to all
 		$this->load->language('extension/payment/bitpay');
 
@@ -145,7 +149,7 @@ class ControllerExtensionPaymentBitpay extends Controller {
 		$data['tab_support'] = $this->language->get('tab_support');
 
 		$data['url_action'] = $this->url->link('extension/payment/bitpay', 'user_token=' . $this->session->data['user_token'], 'SSL');
-		$data['url_cancel'] = $this->url->link('extension/extension', 'user_token=' . $this->session->data['user_token'], 'SSL');
+		$data['cancel'] = $this->url->link('extension/extension', 'user_token=' . $this->session->data['user_token'], 'SSL');
 		$data['url_reset'] = $this->url->link('extension/payment/bitpay/reset', 'user_token=' . $this->session->data['user_token'], 'SSL');
 
 		$data['breadcrumbs'] = array();
@@ -465,7 +469,7 @@ class ControllerExtensionPaymentBitpay extends Controller {
 		if ($this->request->post['payment_bitpay_status'] && $this->setting('connection') !== 'connected') {
 			$this->error['status'] = $this->language->get('error_status');
 		}
-
+                
 		return !$this->error;
 	}
 
@@ -514,7 +518,8 @@ class ControllerExtensionPaymentBitpay extends Controller {
 				$default_complete = $order_status['order_status_id'];
 			}
 		}
-
+                //Delete old settings from previous bitpay installation
+                $this->db->query("delete from oc_setting where code='bitpay'");
 		$this->load->model('setting/setting');
 		$default_settings = array(
 			'payment_bitpay_private_key' => null,
