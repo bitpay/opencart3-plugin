@@ -21,7 +21,7 @@ class ControllerExtensionPaymentBitpay extends Controller {
 		parent::__construct($registry);
                 if(!extension_loaded('gmp') && !extension_loaded('bcmath'))
 		{
-			echo 'Cannot use BitPay extension. It needs GMP or BCMath Exctensions.';
+			echo 'Cannot use the BitPay plugin: please enable PHP support for either GMP or BCMath.';
 			exit;
 		}
 		// Make langauge strings and BitPay Library available to all
