@@ -17,6 +17,8 @@ $_['text_redirect']      = 'Redirect';
 $_['entry_total']        = 'Total Needed for BitPay Checkout is 1.00';
 $_['entry_order_status'] = 'New Order Status should be set to Pending';
 $_['entry_environment']  = 'Environment';
+$_['entry_flow']  = 'Checkout Flow';
+
 $_['entry_dev_token']    = 'Development Token';
 $_['entry_prod_token']    = 'Production Token';
 $_['entry_auto_email']    = 'Auto-Capture Email';
