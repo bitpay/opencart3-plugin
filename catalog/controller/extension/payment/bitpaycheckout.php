@@ -13,17 +13,17 @@ class ControllerExtensionPaymentBitpaycheckout extends Controller
         $name = 'BitPay_Checkout';
         $platform = 'OpenCart';
         $version = "3.0.0.0";
-        return $name.'_'.$platform.'_'.$version;
+        return $name . '_' . $platform . '_' . $version;
     }
     public function BPC_getBitPayDashboardLink($invoiceID)
     { //dev or prod token
         $env = intval($this->config->get('payment_bitpaycheckout_env'));
-           if($env != 1){
-               $env = 'test';
-           }else{
-               $env = 'prod';
-           }
-            
+        if ($env != 1) {
+            $env = 'test';
+        } else {
+            $env = 'prod';
+        }
+
         switch ($env) {
             case 'test':
             default:
@@ -34,68 +34,66 @@ class ControllerExtensionPaymentBitpaycheckout extends Controller
                 break;
         }
     }
-    public function ipnUpdate($order_id,$order_invoice,$event){
-        $table_name = DB_PREFIX.'bitpay_checkout_transactions';
+    public function ipnUpdate($order_id, $order_invoice, $event)
+    {
+        $table_name = DB_PREFIX . 'bitpay_checkout_transactions';
         $this->load->model('checkout/order');
-        $this->load->model('account/activity');
         switch ($event) {
             #complete, update invoice table to Paid
             case 'invoice_confirmed':
-            $note = 'BitPay Invoice ID: <a target = "_blank" href = "' . $this->BPC_getBitPayDashboardLink($order_invoice) . '">' . $order_invoice . '</a> processing has been completed.';
-            $order = $this->model_checkout_order->getOrder($order_id); // use the desired $orderId here
-            $this->model_checkout_order->addOrderHistory($order_id, 5,$note);
-            
-            
-            $sql = "UPDATE $table_name SET transaction_status = '$event' WHERE order_id = '$order_id' AND transaction_id = '$order_invoice'";
-            $this->db->query($sql);
-       
-            break;
-            
+                $note = 'BitPay Invoice ID: <a target = "_blank" href = "' . $this->BPC_getBitPayDashboardLink($order_invoice) . '">' . $order_invoice . '</a> processing has been completed.';
+                $order = $this->model_checkout_order->getOrder($order_id); // use the desired $orderId here
+                $this->model_checkout_order->addOrderHistory($order_id, 5, $note);
+
+                $sql = "UPDATE $table_name SET transaction_status = '$event' WHERE order_id = '$order_id' AND transaction_id = '$order_invoice'";
+                $this->db->query($sql);
+
+                break;
+
             #processing - put in Payment Pending
             case 'invoice_paidInFull':
-            $note = 'BitPay Invoice ID: <a target = "_blank" href = "' . $this->BPC_getBitPayDashboardLink($order_invoice) . '">' . $order_invoice . '</a> is processing.';
+                $note = 'BitPay Invoice ID: <a target = "_blank" href = "' . $this->BPC_getBitPayDashboardLink($order_invoice) . '">' . $order_invoice . '</a> is processing.';
 
-            $order = $this->model_checkout_order->getOrder($order_id); // use the desired $orderId here
-            $this->model_checkout_order->addOrderHistory($order_id, 1,$note);  
-       
-            $sql = "UPDATE $table_name SET transaction_status = '$event' WHERE order_id = '$order_id' AND transaction_id = '$order_invoice'";
-            $this->db->query($sql);
-            break;
-            
+                $order = $this->model_checkout_order->getOrder($order_id); // use the desired $orderId here
+                $this->model_checkout_order->addOrderHistory($order_id, 1, $note);
+
+                $sql = "UPDATE $table_name SET transaction_status = '$event' WHERE order_id = '$order_id' AND transaction_id = '$order_invoice'";
+                $this->db->query($sql);
+                break;
+
             #confirmation error - put in Payment Pending
             case 'invoice_failedToConfirm':
-            $note = 'BitPay Invoice ID: <a target = "_blank" href = "' . $this->BPC_getBitPayDashboardLink($order_invoice) . '">' . $order_invoice . '</a> has become invalid because of network congestion.  Order will automatically update when the status changes.';
-            $order = $this->model_checkout_order->getOrder($order_id); // use the desired $orderId here
-            $this->model_checkout_order->addOrderHistory($order_id, 1,$note);
-               
-       
-            $sql = "UPDATE $table_name SET transaction_status = '$event' WHERE order_id = '$order_id' AND transaction_id = '$order_invoice'";
-            $this->db->query($sql);
-            break;
-            
+                $note = 'BitPay Invoice ID: <a target = "_blank" href = "' . $this->BPC_getBitPayDashboardLink($order_invoice) . '">' . $order_invoice . '</a> has become invalid because of network congestion.  Order will automatically update when the status changes.';
+                $order = $this->model_checkout_order->getOrder($order_id); // use the desired $orderId here
+                $this->model_checkout_order->addOrderHistory($order_id, 1, $note);
+
+                $sql = "UPDATE $table_name SET transaction_status = '$event' WHERE order_id = '$order_id' AND transaction_id = '$order_invoice'";
+                $this->db->query($sql);
+                break;
+
             #expired, remove from transaction table, wont be in invoice table
             case 'invoice_expired':
-               #delete any orphans
-               $this->model_checkout_order->deleteOrder($order_id);
-               
-               #delete from transaction_list
-               $table_name = DB_PREFIX.'bitpay_checkout_transactions';
-               $sql = "DELETE FROM  $table_name WHERE order_id = $order_id AND transaction_id = '$order_invoice'";
-               $this->db->query($sql);
-               
-            break;
-            
+                #delete any orphans
+                $this->model_checkout_order->deleteOrder($order_id);
+
+                #delete from transaction_list
+                $table_name = DB_PREFIX . 'bitpay_checkout_transactions';
+                $sql = "DELETE FROM  $table_name WHERE order_id = $order_id AND transaction_id = '$order_invoice'";
+                $this->db->query($sql);
+
+                break;
+
             #update both table to refunded
             case 'invoice_refundComplete':
-            $note = 'BitPay Invoice ID: <a target = "_blank" href = "' . $this->BPC_getBitPayDashboardLink($order_invoice) . '">' . $order_invoice . ' </a> has been refunded.';
+                $note = 'BitPay Invoice ID: <a target = "_blank" href = "' . $this->BPC_getBitPayDashboardLink($order_invoice) . '">' . $order_invoice . ' </a> has been refunded.';
 
-            $order = $this->model_checkout_order->getOrder($order_id); // use the desired $orderId here
-            $this->model_checkout_order->addOrderHistory($order_id, 11,$note);
-       
-            $sql = "UPDATE $table_name SET transaction_status = '$event' WHERE order_id = '$order_id' AND transaction_id = '$order_invoice'";
-            $this->db->query($sql);
-            break;
-       }
+                $order = $this->model_checkout_order->getOrder($order_id); // use the desired $orderId here
+                $this->model_checkout_order->addOrderHistory($order_id, 11, $note);
+
+                $sql = "UPDATE $table_name SET transaction_status = '$event' WHERE order_id = '$order_id' AND transaction_id = '$order_invoice'";
+                $this->db->query($sql);
+                break;
+        }
     }
 
     public function confirm()
@@ -125,15 +123,15 @@ class ControllerExtensionPaymentBitpaycheckout extends Controller
 
             $price = $data['price'];
 
-            $table_name = DB_PREFIX.'bitpay_checkout_transactions';
+            $table_name = DB_PREFIX . 'bitpay_checkout_transactions';
             $sql = "SELECT * FROM $table_name WHERE order_id = '$orderid' AND transaction_id = '$order_invoice' LIMIT 1";
             $result = $this->db->query($sql);
 
-            if($result->num_rows > 0):
+            if ($result->num_rows > 0):
                 #found in the table, now update
-                $this->ipnUpdate($orderid,$order_invoice,$event['name']);
+                $this->ipnUpdate($orderid, $order_invoice, $event['name']);
             endif;
-            
+
             die();
         }
 
@@ -146,7 +144,7 @@ class ControllerExtensionPaymentBitpaycheckout extends Controller
                 #delete from OC
                 $this->model_checkout_order->deleteOrder($order_id);
                 #delete from transaction_list
-                $table_name = DB_PREFIX.'bitpay_checkout_transactions';
+                $table_name = DB_PREFIX . 'bitpay_checkout_transactions';
                 $sql = "DELETE FROM  $table_name WHERE order_id = $order_id";
                 $this->db->query($sql);
                 echo true;
@@ -154,35 +152,31 @@ class ControllerExtensionPaymentBitpaycheckout extends Controller
             }
             #change transaction status in bitpay_transaction
             if ($_GET['action'] == 'c') {
-                #delete from OC
-                #$this->model_checkout_order->deleteOrder($order_id);
-                #delete from transaction_list
-                $table_name = DB_PREFIX.'bitpay_checkout_transactions';
+                #update transaction_list
+                $table_name = DB_PREFIX . 'bitpay_checkout_transactions';
                 $sql = "UPDATE $table_name SET transaction_status = 'paid' WHERE order_id = $order_id";
                 $this->db->query($sql);
                 echo true;
                 die();
             }
 
-             
-
             $order = $this->model_checkout_order->getOrder($order_id); // use the desired $orderId here
             $this->model_checkout_order->addOrderHistory($order_id, $this->config->get('payment_bitpaycheckout_order_status_id'));
-            
+
             #BitPay Library Stuff
             $env = intval($this->config->get('payment_bitpaycheckout_env'));
-           if($env != 1){
-               $env = 'test';
-           }else{
-               $env = 'prod';
-           }
+            if ($env != 1) {
+                $env = 'test';
+            } else {
+                $env = 'prod';
+            }
             switch ($env) {
                 case 'test':
-                $bitpay_checkout_token = $this->config->get('payment_bitpaycheckout_dev_token');
-                break;
+                    $bitpay_checkout_token = $this->config->get('payment_bitpaycheckout_dev_token');
+                    break;
                 case 'prod':
-                $bitpay_checkout_token = $this->config->get('payment_bitpaycheckout_prod_token');
-                break;
+                    $bitpay_checkout_token = $this->config->get('payment_bitpaycheckout_prod_token');
+                    break;
             }
             $config = new BPC_Configuration($bitpay_checkout_token, $env);
             $use_modal = intval($this->config->get('payment_bitpaycheckout_flow')); #1 = modal
@@ -200,16 +194,13 @@ class ControllerExtensionPaymentBitpaycheckout extends Controller
             #user email
             if ($capture_email == 1 && !empty($this->customer->getEmail())) {
                 $buyerInfo = new stdClass();
-                $buyerInfo->name = $this->customer->getFirstName().' '.$this->customer->getLastName();
+                $buyerInfo->name = $this->customer->getFirstName() . ' ' . $this->customer->getLastName();
                 $buyerInfo->email = $this->customer->getEmail();
                 $params->buyer = $buyerInfo;
 
             }
             $params->redirectURL = HTTPS_SERVER . 'index.php?route=checkout/success&order_id=' . $order_id;
-            #http://local.opencart.com/index.php?route=checkout/success
-
             $params->notificationURL = HTTPS_SERVER . 'index.php?route=extension/payment/bitpaycheckout/confirm&action=ipn';
-            #http://<host>/wp-json/bitpay/ipn/status
             $params->extendedNotifications = true;
             $params->transactionSpeed = 'medium';
             $params->acceptanceWindow = 1200000;
@@ -230,15 +221,13 @@ class ControllerExtensionPaymentBitpaycheckout extends Controller
             $response->invoiceredirectURL = $invoice->BPC_getInvoiceURL();
 
             #insert into the database
-            if($invoiceID != ''){
-                $table_name = DB_PREFIX.'bitpay_checkout_transactions';
-                $sql = "INSERT INTO $table_name (order_id,transaction_id,transaction_status) 
+            if ($invoiceID != '') {
+                $table_name = DB_PREFIX . 'bitpay_checkout_transactions';
+                $sql = "INSERT INTO $table_name (order_id,transaction_id,transaction_status)
                 VALUES ('$params->orderId','$invoiceID','new')";
                 $this->db->query($sql);
             }
-
             echo (json_encode($response));
-
         }
     }
 }
