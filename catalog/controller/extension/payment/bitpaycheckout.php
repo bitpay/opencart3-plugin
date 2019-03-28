@@ -209,7 +209,6 @@ class ControllerExtensionPaymentBitpaycheckout extends Controller
             #http://local.opencart.com/index.php?route=checkout/success
 
             $params->notificationURL = HTTPS_SERVER . 'index.php?route=extension/payment/bitpaycheckout/confirm&action=ipn';
-            error_log($params->notificationURL);
             #http://<host>/wp-json/bitpay/ipn/status
             $params->extendedNotifications = true;
             $params->transactionSpeed = 'medium';
