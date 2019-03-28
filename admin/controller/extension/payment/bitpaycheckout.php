@@ -1,9 +1,14 @@
 <?php
 class ControllerExtensionPaymentBitpaycheckout extends Controller {
 	private $error = array();
-
+    public function install() {
+      
+        $this->load->model('extension/payment/bitpaycheckout');
+        $this->model_extension_payment_bitpaycheckout->install();
+    }
 	public function index() {
-        error_log(print_r($this->request->post,true));
+		$this->install();
+        #error_log(print_r($this->request->post,true));
 		$this->load->language('extension/payment/bitpaycheckout');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -50,13 +55,14 @@ class ControllerExtensionPaymentBitpaycheckout extends Controller {
 		} else {
 			$data['payment_bitpaycheckout_total'] = $this->config->get('payment_bitpaycheckout_total');
 		}
-
-		if (isset($this->request->post['payment_bitpaycheckout_test'])) {
-			$data['payment_bitpaycheckout_test'] = $this->request->post['payment_bitpaycheckout_test'];
-		} else {
-			$data['payment_bitpaycheckout_test'] = $this->config->get('payment_bitpaycheckout_test');
+		
+		if (isset($this->request->post['payment_bitpaycheckout_env'])) {
+			$data['payment_bitpaycheckout_env'] = $this->request->post['payment_bitpaycheckout_env'];
+		} 	else {
+			$data['payment_bitpaycheckout_env'] = $this->config->get('payment_bitpaycheckout_env');
 		}
 
+	
 		if (isset($this->request->post['payment_bitpaycheckout_prod_token'])) {
 			$data['payment_bitpaycheckout_prod_token'] = $this->request->post['payment_bitpaycheckout_prod_token'];
 		} else {
@@ -116,6 +122,8 @@ class ControllerExtensionPaymentBitpaycheckout extends Controller {
 			$data['payment_bitpaycheckout_sort_order'] = $this->config->get('payment_bitpaycheckout_sort_order');
 		}
 
+		#echo '<pre>';
+		#print_r($data);
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');

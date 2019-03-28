@@ -1,0 +1,77 @@
+<!--bitpay-->
+
+<div class="buttons">
+  <div class="pull-right">
+    <input type="button" value="{{ button_confirm }}" id="button-confirm" class="btn btn-primary" data-loading-text="{{ text_loading }}" />
+  </div>
+</div>
+<script type="text/javascript">
+		var payment_status = null;
+    var is_paid = false
+		var redirect_url
+		var order_id
+		window.addEventListener("message", function(event) {
+		    payment_status = event.data.status;
+           
+            if(payment_status == 'paid'){
+                is_paid = true
+            }
+		}, false);
+
+		bitpay.onModalWillLeave(function() {
+            
+		    if (is_paid == true) {
+					$.ajax({
+									type: 'get',
+									url: 'index.php?route=extension/payment/bitpaycheckout/confirm&action=c',
+									cache: false,
+									success: function(result) {
+										location = redirect_url
+									}
+								});
+		        	
+		    } else {
+		        $.ajax({
+									type: 'get',
+									url: 'index.php?route=extension/payment/bitpaycheckout/confirm&action=d',
+									cache: false,
+									success: function(result) {
+										location.reload()
+									}
+								});
+		    
+				}
+		});
+
+$('#button-confirm').on('click', function() {
+	$.ajax({
+		type: 'get',
+		url: 'index.php?route=extension/payment/bitpaycheckout/confirm&action=a',
+		cache: false,
+		beforeSend: function() {
+			$('#button-confirm').button('loading');
+		},
+		complete: function(result) {
+				//console.log('data',result)
+			$('#button-confirm').button('reset');
+		},
+		success: function(result) {
+			var data = JSON.parse(result);
+			redirect_url = data.redirectURL
+			order_id - data.order_id
+
+			if(data.modal == 1 || 1==1){
+				//modal
+				if(data.env == 'test'){
+					bitpay.enableTestMode()
+				}
+					bitpay.showInvoice(data.invoiceID)
+
+			}else{
+				location = data.invoiceredirectURL
+			}
+			
+		}
+	});
+});
+</script>

@@ -58,19 +58,11 @@
           </div>
 
     <div class="form-group">
-			<label class="col-sm-2 control-label" for="payment_bitpaycheckout_test">{{ entry_environment }}</label>
+			<label class="col-sm-2 control-label" for="payment-bitpaycheckout-env-id">{{ entry_environment }}</label>
 			<div class="col-sm-10">
-			  <select name="payment_bitpaycheckout_test" id="payment_bitpaycheckout_test" class="form-control">
-				{% if payment_bitpaycheckout_test == 'test' %}
-					<option value="test" selected="selected">{{ text_test }}</option>
-				{% else %}
-					<option value="test">{{ text_test }}</option>
-				{% endif %}
-				{% if payment_bitpaycheckout_test == 'prod' %}
-					<option value="prod" selected="selected">{{ text_prod }}</option>
-				{% else %}
-					<option value="prod">{{ text_prod }}</option>
-				{% endif %}
+			  <select name="payment_bitpaycheckout_env" id="payment-bitpaycheckout-env-id" class="form-control">
+					<option value="0" {% if payment_bitpaycheckout_env == '0' %} selected = "selected" {% endif %}>Test</option>
+          <option value="1" {% if payment_bitpaycheckout_env == '1' %} selected = "selected" {% endif %}>Production</option>
 			  </select>
         <p>Select <b>Test</b> for testing the plugin, <b>Production</b> when you are ready to go live.</p>
 			 </div>
@@ -78,26 +70,26 @@
 
 
       <div class="form-group">
-            <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_dev_token }}</label>
+            <label class="col-sm-2 control-label" for="input-dev-token">{{ entry_dev_token }}</label>
             <div class="col-sm-10">
-              <input type="text" name="payment_bitpaycheckout_dev_token" value="{{ payment_bitpaycheckout_dev_token }}" placeholder="{{ entry_dev_token }}" id="input-sort-order" class="form-control" />
+              <input type="text" name="payment_bitpaycheckout_dev_token" value="{{ payment_bitpaycheckout_dev_token }}" placeholder="{{ entry_dev_token }}" id="input-dev-token" class="form-control" />
               <p>Your <b>development</b> merchant token.  <a href = "https://test.bitpay.com/dashboard/merchant/api-tokens" target = "_blank">Create one here</a> and <b>uncheck</b> `Require Authentication`</p>
         </div>
       </div>
 
       <div class="form-group">
-            <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_prod_token }}</label>
+            <label class="col-sm-2 control-label" for="input-prod-token">{{ entry_prod_token }}</label>
             <div class="col-sm-10">
-              <input type="text" name="payment_bitpaycheckout_prod_token" value="{{ payment_bitpaycheckout_prod_token }}" placeholder="{{ entry_prod_token }}" id="input-sort-order" class="form-control" />
+              <input type="text" name="payment_bitpaycheckout_prod_token" value="{{ payment_bitpaycheckout_prod_token }}" placeholder="{{ entry_prod_token }}" id="input-prod-token" class="form-control" />
               <p>Your <b>production</b> merchant token.  <a href = "https://www.bitpay.com/dashboard/merchant/api-tokens" target = "_blank">Create one here</a> and <b>uncheck</b> `Require Authentication`</p>
         </div>
       </div>
 
 
       <div class="form-group">
-			<label class="col-sm-2 control-label" for="payment_bitpaycheckout_flow">{{ entry_flow }}</label>
+			<label class="col-sm-2 control-label" for="payment-bitpaycheckout-flow">{{ entry_flow }}</label>
 			<div class="col-sm-10">
-			  <select name="payment_bitpaycheckout_flow" id="payment_bitpaycheckout_flow" class="form-control">
+			  <select name="payment_bitpaycheckout_flow" id="payment-bitpaycheckout-flow" class="form-control">
 				{% if payment_bitpaycheckout_flow == '1' %}
 					<option value="1" selected="selected">{{ text_modal }}</option>
 				{% else %}
@@ -114,9 +106,9 @@
       </div>
 
       <div class="form-group">
-			<label class="col-sm-2 control-label" for="payment_bitpaycheckout_capture_email">{{ entry_auto_email }}</label>
+			<label class="col-sm-2 control-label" for="payment-bitpaycheckout-capture-email">{{ entry_auto_email }}</label>
 			<div class="col-sm-10">
-			  <select name="payment_bitpaycheckout_capture_email" id="payment_bitpaycheckout_capture_email" class="form-control">
+			  <select name="payment_bitpaycheckout_capture_email" id="payment-bitpaycheckout-capture-email" class="form-control">
 				{% if payment_bitpaycheckout_capture_email == '1' %}
 					<option value="1" selected="selected">Yes</option>
 				{% else %}
