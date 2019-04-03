@@ -1,88 +1,120 @@
-# Notice
+# OpenCart
 
-This is a Community-supported project.
+## Overview
 
-If you are interested in becoming a maintainer of this project, please contact us at support@bitpay.com. Developers at BitPay will attempt to work along the new maintainers to ensure the project remains viable for the foreseeable future.
+OpenCart is a free open source ecommerce platform for online merchants. OpenCart provides a professional and reliable foundation from which to build a successful online store.
 
-# BitPay for OpenCart
+## Reporting a bug
 
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/bitpay/opencart-plugin/master.svg?style=flat-square)](https://travis-ci.org/bitpay/opencart-plugin)
+Read the instructions below before you create a bug report.
 
-## Last OpenCart Version Tested: 3.0.2.0 (not compatible with v2 branch)
+ 1. Search the [OpenCart forum](http://forum.opencart.com/viewforum.php?f=191), ask the community if they have seen the bug or know how to fix it.
+ 2. Check all open and closed issues on the [GitHub bug tracker](https://github.com/opencart/opencart/issues).
+ 3. If your bug is related to the OpenCart core code then please create a bug report on GitHub.
+ 4. READ the [changelog for the master branch](https://github.com/opencart/opencart/blob/master/changelog.md)
+ 5. Use [Google](http://www.google.com) to search for your issue.
+ 6. Make sure that your bug/issue is not related to your hosting environment.
 
-## Installation
+If you are not sure about your issue, it is always best to ask the community on our [bug forum thread](http://forum.opencart.com/viewforum.php?f=191)
 
-Follow the instructions found in the [BitPay for OpenCart Guide](GUIDE.md)
+**Important!**
+- If your bug report is not related to the core code (such as a 3rd party module or your server configuration) then the issue will be closed without a reason. You must contact the extension developer, use the forum or find a commercial partner to resolve a 3rd party code issue.
+- If you would like to report a serious security bug please PM an OpenCart moderator/administrator on the forum. Please do not report concept/ideas/unproven security flaws - all security reports are taken seriously but you must include the EXACT details steps to reproduce it. Please DO NOT post security flaws in a public location.
 
-## Server requirements
-PHP > 5.5 or PHP > 7.0, with the following PHP plugins enabled:
-* GMP or BCMATH
-* OpenSSL
-* JSON
-* CURL
+## Making a suggestion
+
+Please do not create a bug report if you think something needs improving / adding (such as features or change to code standards etc).
+
+We welcome public suggestions on our [User Voice site](http://opencart.uservoice.com).
+
+# Requirements
+
+This plugin requires the following:
+
+* OpenCart 3.x
+* A BitPay merchant account ([Test](http://test.bitpay.com) or [Production](http://www.bitpay.com))
+* An API Token ([Test](https://test.bitpay.com/dashboard/merchant/api-tokens) or [Production](https://bitpay.com/dashboard/merchant/api-tokens)
+	* When setting up your token, **uncheck** the *Require Authentication button*
+
+	# Plugin Fields
+
+Enable the extension by going to Extensions->Extensions->(choose Payments as extension type->BitPay Checkout
+
+Set the following fields depending on your OpenCart setup.
 
 
-## Development Setup
+* **Merchant Tokens**
+	* A ***development*** or ***production*** token will need to be set
+* **Environment**
+	* Choose **Test** or **Production**, depending on your current setup.  Your matching API Token must be set.
 
-``` bash
-# Clone the repo
-$ git clone https://github.com/bitpay/opencart3-plugin.git
-$ cd ./opencart3-plugin
+* **Currency**
+	* Choose the currency to accept.  If no currency is set, **USD** will be the default. 
+* **New Order Status**
+	* Set the default status for your orders
+*  **Checkout Flow**
+	*  **Redirect** This will redirect users to BitPay.com to pay their invoice.  After a transaction, the user will be redirected back to your site to the order info page
+	*  **Modal** This will keep the user on your site and show a modal window.  After a transaction, the user will be redirected to the order info page
+*  **Auto-Capture Email**
+	* If enabled, this will append the users email address to the invoice if possible.  If not, the user will have to enter their email address on the invoice
 
-# Install dependencies via Composer
-$ composer install
+For the modal invoice, the following must be added
 
-# Set Environment Variables (variables needed can be found in .env.sample)
-$ cp .env.sample .env
+* Go to Design->Theme Editor->common->header
+* add the following before the closing </head> tag
+```<script src="https://bitpay.com/bitpay.min.js" type="text/javascript"></script>```
+* Flush your OpenCart storage to finish
 
-# After modifying the Environment Variables for your environment setup OpenCart
-$ ./bin/robo setup
-```
+## IPN
+This extension includes a built in IPN that will update from BitPay.com as the invoice status changes.  It will update the order (Pending, Processing, Complete) and add a link to the order notes to the specific transaction  
+	
 
-## Development Workflow
 
-``` bash
-# Run PHP Server of OpenCart installation and redirect bash I/O
-$ ./bin/robo server &
+## How to contribute
 
-# Watch for source code changes and copy them to the OpenCart installation
-$ ./bin/robo watch
-```
+Fork the repository, edit and [submit a pull request](https://github.com/opencart/opencart/wiki/Creating-a-pull-request).
 
-## Testing
+Please be very clear on your commit messages and pull request, empty pull request messages may be rejected without reason.
 
-``` bash
-$ ./bin/robo test
-```
+Your code standards should match the [OpenCart coding standards](https://github.com/opencart/opencart/wiki/Coding-standards). We use an automated code scanner to check for most basic mistakes - if the test fails your pull request will be rejected.
 
-## Build
+## Versioning
 
-``` bash
-$ ./bin/robo build
+The version is broken down into 4 points e.g 1.2.3.4 We use MAJOR.MINOR.FEATURE.PATCH to describe the version numbers.
 
-# Outputs:
-# ./build/bitpay-opencart - the distribution files
-# ./build/bitpay-opencart.ocmod.zip - the distribution archive
-```
+A MAJOR is very rare, it would only be considered if the source was effectively re-written or a clean break was desired for other reasons. This increment would likely break most 3rd party modules.
 
-## Contributing
+A MINOR is when there are significant changes that affect core structures. This increment would likely break some 3rd party modules.
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+A FEATURE version is when new extensions or features are added (such as a payment gateway, shipping module etc). Updating a feature version is at a low risk of breaking 3rd party modules.
 
-## Support
+A PATCH version is when a fix is added, it should be considered safe to update patch versions e.g 1.2.3.4 to 1.2.3.5
 
-**BitPay Support:**
+## Releases
 
-* Last OpenCart Version Tested: 3.2.0.2 (not compatible with v2 branch)
-* [Support](https://support.bitpay.com/hc/en-us/articles/115003000543-How-do-I-accept-bitcoin-with-Opencart-)
-  * BitPay merchant support documentation
+OpenCart will announce to developers 1 week prior to public release of FEATURE versions, this is to allow for testing of their own modules for compatibility. For bigger releases (ones that contain many core changes, features and fixes) an extended period will be considered following an announced release candidate (RC). Patch versions (which are considered safe to update with) may have a significantly reduced developer release period.
 
-**OpenCart Support:**
+The master branch will always contain an "_rc" postfix of the next intended version. The next "_rc" version may change at any time.
 
-* [Homepage](http://www.opencart.com)
-* [Forums](http://forum.opencart.com)
+Developer release source code will not change once tagged.
+
+If a bug is found in an announced developer release that is significant (such as a major feature is broken) then the release will be pulled. A patch version will be issued to replace it, depending on the severity of the patch an extended testing period may be announced. If the developer release version was never made public then the preceding patch version tag will be removed.
+
+To receive developer notifications about release information, sign up to the newsletter on the [OpenCart website](http://www.opencart.com) - located in the footer. Then choose the developer news option.
+
+## How to install
+
+Please read the installation instructions included in the repository or download file.
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+[GNU General Public License version 3 (GPLv3)](https://github.com/opencart/opencart/blob/master/license.txt)
+
+## Links
+
+- [OpenCart homepage](http://www.opencart.com/)
+- [OpenCart forums](http://forum.opencart.com/)
+- [OpenCart blog](http://www.opencart.com/index.php?route=feature/blog)
+- [How to documents](http://docs.opencart.com/)
+- [Newsletter](http://newsletter.opencart.com/h/r/B660EBBE4980C85C)
+- [User Voice suggestions](http://opencart.uservoice.com)

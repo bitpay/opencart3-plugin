@@ -1,0 +1,165 @@
+<!--BitPay-->
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-payment" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-payment" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-total"><span data-toggle="tooltip" title="{{ help_total }}">{{ entry_total }}</span></label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_bitpaycheckout_total" value="{{ payment_bitpaycheckout_total }}" placeholder="{{ entry_total }}" id="input-total" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-order-status">{{ entry_order_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_bitpaycheckout_order_status_id" id="input-order-status" class="form-control">
+                {% for order_status in order_statuses %}
+                {% if order_status.order_status_id == payment_bitpaycheckout_order_status_id %}
+                <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                {% else %}
+                <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-geo-zone">BitPay Supported Countries (<a onclick = "showCountries();" style = "cursor:pointer;">toggle</a>)</label>
+            <div class="col-sm-10">
+             
+              <span class = "supported_countries" style = "display:none;">
+              <p>Afghanistan, Albania, American Samoa, Andorra, Angola, Anguilla, Antarctica, Antigua and Barbuda, Argentina, Armenia, Aruba, Australia, Austria, Azerbaijan, Bahamas, Bahrain, Barbados, Belarus, Belgium, Belize, Benin, Bermuda, Bhutan, Bosnia and Herzegovina, Botswana, Bouvet Island, Brazil, British Indian Ocean Territory, British Virgin Islands, Brunei, Bulgaria, Burkina Faso, Burundi, Cameroon, Canada, Cape Verde, Cayman Islands, Central African Republic, Chad, Chile, China, Christmas Island, Cocos (Keeling Islands, Colombia, Comoros, Congo - Brazzaville, Congo - Kinshasa, Cook Islands, Costa Rica, Croatia, Cyprus, Czech Republic, Côte d’Ivoire, Denmark, Djibouti, Dominica, Dominican Republic, El Salvador, Equatorial Guinea, Eritrea, Estonia, Ethiopia, Falkland Islands, Faroe Islands, Fiji, Finland, France, French Guiana, French Polynesia, French Southern Territories, Gabon, Gambia, Georgia, Germany, Ghana, Gibraltar, Greece, Greenland, Grenada, Guadeloupe, Guam, Guatemala, Guernsey, Guinea, Guinea-Bissau, Guyana, Haiti, Heard &amp; McDonald Islands, Honduras, Hong Kong SAR China, Hungary, Iceland, India, Ireland, Isle of Man, Israel, Italy, Jamaica, Japan, Jersey, Jordan, Kazakhstan, Kenya, Kiribati, Kuwait, Laos, Latvia, Lebanon, Lesotho, Liberia, Libya, Liechtenstein, Lithuania, Luxembourg, Macau SAR China, Macedonia, Madagascar, Malawi, Malaysia, Maldives, Mali, Malta, Marshall Islands, Martinique, Mauritania, Mauritius, Mayotte, Mexico, Micronesia, Moldova, Monaco, Mongolia, Montenegro, Montserrat, Mozambique, Myanmar (Burma, Namibia, Nauru, Netherlands, Netherlands Antilles, New Caledonia, New Zealand, Nicaragua, Niger, Nigeria, Niue, Norfolk Island, Northern Mariana Islands, Norway, Oman, Pakistan, Palau, Palestinian Territories, Panama, Papua New Guinea, Paraguay, Peru, Philippines, Pitcairn Islands, Poland, Portugal, Puerto Rico, Qatar, Romania, Russia, Rwanda, Réunion, Saint Barthélemy, Saint Helena, Saint Kitts and Nevis, Saint Lucia, Saint Martin, Saint Pierre and Miquelon, Samoa, San Marino, Saudi Arabia, Senegal, Serbia, Seychelles, Sierra Leone, Singapore, Slovakia, Slovenia, Solomon Islands, Somalia, South Africa, South Georgia &amp; South Sandwich Islands, South Korea, Spain, Sri Lanka, St. Vincent &amp; Grenadines, Sudan, Suriname, Svalbard and Jan Mayen, Swaziland, Sweden, Switzerland, São Tomé and Príncipe, Taiwan, Tajikistan, Tanzania, Thailand, Timor-Leste, Togo, Tokelau, Tonga, Trinidad and Tobago, Tunisia, Turkey, Turkmenistan, Turks and Caicos Islands, Tuvalu, U.S. Outlying Islands, U.S. Virgin Islands, Uganda, Ukraine, United Arab Emirates, United Kingdom, United States, Uruguay, Uzbekistan, Vanuatu, Vatican City, Venezuela, Wallis and Futuna, Western Sahara, Yemen, Zambia, Zimbabwe, Åland Islands</p>
+              </span>
+            </div>
+          </div>
+
+    <div class="form-group">
+			<label class="col-sm-2 control-label" for="payment-bitpaycheckout-env-id">{{ entry_environment }}</label>
+			<div class="col-sm-10">
+			  <select name="payment_bitpaycheckout_env" id="payment-bitpaycheckout-env-id" class="form-control">
+					<option value="0" {% if payment_bitpaycheckout_env == '0' %} selected = "selected" {% endif %}>Test</option>
+          <option value="1" {% if payment_bitpaycheckout_env == '1' %} selected = "selected" {% endif %}>Production</option>
+			  </select>
+        <p>Select <b>Test</b> for testing the plugin, <b>Production</b> when you are ready to go live.</p>
+			 </div>
+      </div>
+
+
+      <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-dev-token">{{ entry_dev_token }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_bitpaycheckout_dev_token" value="{{ payment_bitpaycheckout_dev_token }}" placeholder="{{ entry_dev_token }}" id="input-dev-token" class="form-control" />
+              <p>Your <b>development</b> merchant token.  <a href = "https://test.bitpay.com/dashboard/merchant/api-tokens" target = "_blank">Create one here</a> and <b>uncheck</b> `Require Authentication`</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-prod-token">{{ entry_prod_token }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_bitpaycheckout_prod_token" value="{{ payment_bitpaycheckout_prod_token }}" placeholder="{{ entry_prod_token }}" id="input-prod-token" class="form-control" />
+              <p>Your <b>production</b> merchant token.  <a href = "https://www.bitpay.com/dashboard/merchant/api-tokens" target = "_blank">Create one here</a> and <b>uncheck</b> `Require Authentication`</p>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+			<label class="col-sm-2 control-label" for="payment-bitpaycheckout-flow">{{ entry_flow }}</label>
+			<div class="col-sm-10">
+			  <select name="payment_bitpaycheckout_flow" id="payment-bitpaycheckout-flow" class="form-control">
+				{% if payment_bitpaycheckout_flow == '1' %}
+					<option value="1" selected="selected">{{ text_modal }}</option>
+				{% else %}
+					<option value="1">{{ text_modal }}</option>
+				{% endif %}
+				{% if payment_bitpaycheckout_flow == '0' %}
+					<option value="0" selected="selected">{{ text_redirect }}</option>
+				{% else %}
+					<option value="0">{{ text_redirect }}</option>
+				{% endif %}
+			  </select>
+        <p>If this is set to <b>Redirect</b>, then the customer will be redirected to <b>BitPay</b> to checkout, and return to the checkout page once the payment is made.<br>If this is set to <b>Modal</b>, the user will stay on your site and complete the transaction.</p>
+			 </div>
+      </div>
+
+      <div class="form-group">
+			<label class="col-sm-2 control-label" for="payment-bitpaycheckout-capture-email">{{ entry_auto_email }}</label>
+			<div class="col-sm-10">
+			  <select name="payment_bitpaycheckout_capture_email" id="payment-bitpaycheckout-capture-email" class="form-control">
+				{% if payment_bitpaycheckout_capture_email == '1' %}
+					<option value="1" selected="selected">Yes</option>
+				{% else %}
+					<option value="1">Yes</option>
+				{% endif %}
+				{% if payment_bitpaycheckout_capture_email == '0' %}
+					<option value="0" selected="selected">No</option>
+				{% else %}
+					<option value="0">No</option>
+				{% endif %}
+			  </select>
+        <p>Should BitPay try to auto-add the client's email address?  If <b>Yes</b>, the client will not be able to change the email address on the BitPay invoice.  If <b>No</b>, they will be able to add their own email address when paying the invoice.</p>
+			 </div>
+      </div>
+
+
+          <!--default stuff-->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_bitpaycheckout_status" id="input-status" class="form-control">
+                {% if payment_bitpaycheckout_status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+
+
+
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_bitpaycheckout_sort_order" value="{{ payment_bitpaycheckout_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type = "text/javascript">
+function showCountries(){
+  $( ".supported_countries" ).toggle( "slow", function() {
+    // Animation complete.
+  });
+}
+</script>
+{{ footer }} 
