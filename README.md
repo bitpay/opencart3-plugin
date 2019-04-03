@@ -1,4 +1,4 @@
-# OpenCarta
+# OpenCart
 
 [![Build Status](https://travis-ci.org/bitpay/opencart3-plugin.svg?branch=master)](https://travis-ci.org/bitpay/opencart3-plugin)
 
