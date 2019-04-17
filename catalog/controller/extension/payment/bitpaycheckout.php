@@ -12,7 +12,7 @@ class ControllerExtensionPaymentBitpaycheckout extends Controller
     {
         $name = 'BitPay_Checkout';
         $platform = 'OpenCart';
-        $version = "3.0.0.0";
+        $version = "3.0.0.1";
         return $name . '_' . $platform . '_' . $version;
     }
     public function BPC_getBitPayDashboardLink($invoiceID)
