@@ -60,7 +60,7 @@ $('#button-confirm').on('click', function() {
 			redirect_url = data.redirectURL
 			order_id - data.order_id
 
-			if(data.modal == 1){
+			if(data.use_modal == 1){
 				//modal
 				if(data.env == 'test'){
 					bitpay.enableTestMode()
