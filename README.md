@@ -1,3 +1,10 @@
+> [!WARNING]
+> **This repository is archived and no longer maintained by BitPay.**
+>
+> It is read-only and will not receive updates, bug fixes, or security fixes. Please do not start new integrations from this code.
+>
+> For currently supported integrations, see [eCommerce Plugins](https://developer.bitpay.com/docs/plugins) and [Libraries](https://developer.bitpay.com/docs/libraries). If you already use this code, we recommend moving to a supported integration.
+
 # OpenCart
 
 [![Build Status](https://travis-ci.org/bitpay/opencart3-plugin.svg?branch=master)](https://travis-ci.org/bitpay/opencart3-plugin)
